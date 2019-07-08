@@ -1,26 +1,41 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {Button} from 'react-bootstrap';
+import fetchCats from './actions/fetchCats';
+import {connect} from "react-redux";
+import CatList from './CatList';
+import fetchMoreCats from './saga/fetchMoreCats'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends React.Component {
+  render(){
+    return (
+        <div className="App">
+          <button
+          className="btn btn-primary"
+          onClick = {this.props.fetchCats}
+          >
+              Fetch cats
+          </button>
+            <button
+                className = "btn btn-secondary"
+                onClick = {this.props.fetchMoreCats}
+            >
+                Fetch more cats
+            </button>
+            <br/>
+          <header>
+            <CatList cats = {this.props.cats}/>
+          </header>
+        </div>
+    );
+  }
+
 }
 
-export default App;
+const mapStateToProps = (state, ownProp) => ({
+    cats: state.cats
+})
+
+
+export default connect(mapStateToProps,{fetchCats, fetchMoreCats})(App);
